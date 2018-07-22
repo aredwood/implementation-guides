@@ -36,13 +36,18 @@ Find the release information for Netverify Web at the link below.<p>
 
 ## <a name="embedded-initiating-the-transaction"></a>Initiating the Transaction
 
-Call the RESTful HTTP POST API **initiateNetverify** with the below JSON parameters to create a transaction for each user. You will receive a Jumio scan reference and an authorization token, which is valid for a certain amount of time, and to be specified in the embed code parameter "authorizationToken".
+Call the RESTful HTTP POST API **initiateNetverify** with the below JSON parameters to create a transaction for each user. You will receive a Jumio scan reference and an authorization token, which is valid for a certain amount of time, and to be specified in the embed code parameter "authorizationToken".
+
 
 HTTP Request Method: **POST**<br>
-**REST URL**: `https://netverify.com/api/netverify/v2/initiateNetverify`<br>
-If your customer account is in the EU data center, use `lon.netverify.com` instead of `netverify.com`.
 
-**Authentication**: The initiateNetverify API call is protected. To access it, use HTTP Basic Authentication with your API token as the "userid" and your API secret as the "password". Log into your Jumio customer portal, and you can find your API token and API secret on the "Settings" page under "API credentials".
+**REST URL**: `https://netverify.com/api/netverify/v2/initiateNetverify`
+<br>
+If your customer account is in the EU data center, use `lon.netverify.com` instead of `netverify.com`.
+
+
+**Authentication**: The initiateNetverify API call is protected. To access it, use HTTP Basic Authentication with your API token as the "userid" and your API secret as the "password". Log into your Jumio customer portal, and you can find your API token and API secret on the "Settings" page under "API credentials".
+
 
 **Header:** The following parameters are mandatory in the "header" section of your request.<br/>
 - `Accept: application/json`<br/>
@@ -51,7 +56,9 @@ If your customer account is in the EU data center, use `lon.netverify.com` inste
 - `User-Agent: YOURCOMPANYNAME YOURAPPLICATIONNAME/VERSION`<br><br>
 The value for **User-Agent** must contain a reference to your business or entity for Jumio to be able to identify your requests. (e.g. YourCompanyName YourAppName/1.0.0). Without a proper User-Agent header, Jumio will take longer to diagnose API issues.
 
-**TLS handshake**: The TLS protocol is required (see Supported cipher suites chapter) and we strongly recommend using the latest version.Note: Calls with missing or suspicious headers, suspicious parameter values, or without HTTP Basic Authentication will result in HTTP status code 403 Forbidden.
+**TLS handshake**: The TLS protocol is required (see Supported cipher suites chapter) and we strongly recommend using the latest version.
+
+Note: Calls with missing or suspicious headers, suspicious parameter values, or without HTTP Basic Authentication will result in HTTP status code 403 Forbidden.
 
 ### Request Parameters
 
@@ -110,19 +117,32 @@ The value for **User-Agent** must contain a reference to your business or entity
 ### Sample Request
 
 ```
-POST https://netverify.com/api/netverify/v2/initiateNetverify HTTP/1.1Accept: application/jsonContent-Type: application/jsonContent-Length: xxxUser-Agent: YOURCOMPANYNAME YOURAPPLICATIONNAME/x.x.xAuthorization: Basic
-{"merchantIdScanReference": "YOURSCANREFERENCE","successUrl": "https://www.your-site.com/sucess","errorUrl": "https://www.your-site.com/error"}
+POST https://netverify.com/api/netverify/v2/initiateNetverify HTTP/1.1
+Accept: application/json
+Content-Type: application/json
+Content-Length: xxx
+User-Agent: YOURCOMPANYNAME YOURAPPLICATIONNAME/x.x.x
+Authorization: Basic
+
+{
+"merchantIdScanReference": "YOURSCANREFERENCE",
+"successUrl": "https://www.your-site.com/sucess",
+"errorUrl": "https://www.your-site.com/error"
+}
 ```
 
 ### Sample Response
 
 ```
-{
+{
+
 "timestamp": "2017-08-16T10:27:29.494Z",
 "authorizationToken": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-"jumioIdScanReference": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+
+"jumioIdScanReference": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 }
-```
+```
+
 
 
 ## Displaying and configuring your Netverify client
@@ -133,11 +153,15 @@ If you are using jQuery, include the jQuery JavaScript library beforehand.
 
 ```
 <script type="text/javascript" src="https://netverify.com/widget/jumio-verify/2.0/iframe-script.js">
-</script><script type="text/javascript">
-/*<![CDATA[*/JumioClient.setVars({
-authorizationToken: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+</script>
+<script type="text/javascript">
+/*<![CDATA[*/
+JumioClient.setVars({
+
+authorizationToken: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 }).initVerify("JUMIOIFRAME");
-/*]]>*/
+
+/*]]>*/
 </script>
 ```
 
@@ -161,11 +185,21 @@ in your HTML code where you want the client to appear.
 ### Sample: Responsive Layout
 
 ```
-<script type="text/javascript" src="https://netverify.com/widget/jumio-verify/2.0/iframe-script.js"></script>
-<script type="text/javascript">
-/*<![CDATA[*/JumioClient.setVars({authorizationToken: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",clientHeight: "responsive",clientWidth: "responsive"}).initVerify("JUMIOIFRAME");
+<script type="text/javascript" src="https://netverify.com/widget/jumio-verify/2.0/iframe-script.js"></script>
+
+<script type="text/javascript">
+
+/*<![CDATA[*/
+JumioClient.setVars({
+authorizationToken: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+
+clientHeight: "responsive",
+clientWidth: "responsive"
+}).initVerify("JUMIOIFRAME");
+
 /*]]>*/
-</script>
+
+</script>
 ```
 
 ### iFrame Logging (optional)
@@ -187,11 +221,21 @@ All data passed is encoded with UTF-8.
 ### Example of JavaScript Code
 
 ```
-function receiveMessage(event) {  var data = window.JSON.parse(event.data);  console.log('Netverify Web embedded was loaded.');  console.log('authorization token:', data.authorizationToken);  console.log('scan reference:', data.scanReference);  console.log('timestamp:', data.timestamp);}window.addEventListener("message", receiveMessage, false);
-```
+function receiveMessage(event) {
+  var data = window.JSON.parse(event.data);
+  console.log('Netverify Web embedded was loaded.');
+  console.log('authorization token:', data.authorizationToken);
+  console.log('scan reference:', data.scanReference);
+  console.log('timestamp:', data.timestamp);
+}
+window.addEventListener("message", receiveMessage, false);
+
+```
 
 
-### <a name="embedded-redirecting-the-customer-after-the-user-journey"></a>Redirecting the customer after the user journey
+
+
+### <a name="embedded-redirecting-the-customer-after-the-user-journey"></a>Redirecting the customer after the user journey
 
 After finishing the Netverify user journey, the iFrame will be redirected to your specified success page, if the ID was able to be processed.
 
@@ -229,7 +273,8 @@ https://www.your-errorurl.com/?idScanStatus=ERROR&errorCode=xxx&authorizationTok
 
 ## Callback
 
-The callback is the authoritative answer from Jumio. Specify a callback URL (for constraints see [Global Netverify settings](/netverify/portal-settings.md#callback-url)</b>) to recieve the ID verification result for each scan (see [Callback](/netverify/callback.md)).
+The callback is the authoritative answer from Jumio. Specify a callback URL (for constraints see [Global Netverify settings](/netverify/portal-settings.md#callback-url)</b>) to recieve the ID verification result for each scan (see [Callback](/netverify/callback.md)).
+
 
 
 ---
@@ -406,7 +451,7 @@ To display information on your redirect pages, you can use the following paramet
 |jumioIdScanReference|Jumio's reference number for each scan|
 |errorCode|Possible codes: <br>• 110 (network communication problem)<br>• 210 (authorization token invalidates or expires during user journey)<br>• 310 (denied as fraud immediately)<br>• 320 (ID could not be processed, e.g. bad image quality)<br>• 340 (capture method restricted to camera and camera not available)|
 
-**Note:** Because HTTP GET parameters can be manipulated on the client side, tey may be used for display purposes only. It is also possible to set success and error URLs to the same address, because you can get the status from the URL's query parameter "idScanStatus".
+**Note:** Because HTTP GET parameters can be manipulated on the client side, they may be used for display purposes only. It is also possible to set success and error URLs to the same address, because you can get the status from the URL's query parameter "idScanStatus".
 
 ### Sample Redirect URL: Success
 
